@@ -1,6 +1,3 @@
-import os
-from datetime import datetime
-
 import allure
 from helpers.db import DB
 from selenium import webdriver
@@ -24,8 +21,10 @@ def browser():
 @pytest.fixture
 def connect_disconnect_with_db():
     db = DB()
-    yield
-    db.close_cursor()
+    conn = db.create_conn()
+    cursor = conn.cursor()
+    yield cursor
+    cursor.close()
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
